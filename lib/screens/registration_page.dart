@@ -37,6 +37,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
   var maskFormatter = MaskTextInputFormatter(
       mask: '(###) ###-####', filter: {"#": RegExp(r'[0-9]')});
 
+  double logoHeight = 200;
+  double spaceHeight1 = 40;
+  double spaceHeight2 = 70;
+
   void registerUser() async {
     showDialog(
       barrierDismissible: false,
@@ -70,178 +74,221 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
   }
 
+  void buttonPressed() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult != ConnectivityResult.mobile &&
+        connectivityResult != ConnectivityResult.wifi) {
+      showSnackBar('No Internet Connection');
+    }
+    if (fullNameController.text.length < 3) {
+      showSnackBar('Please Provide a Valid Full Name');
+      return;
+    }
+    if (!emailController.text.contains('@') &&
+        !emailController.text.contains('.')) {
+      showSnackBar('Please a Valid Email Address');
+      return;
+    }
+    if (maskFormatter.getUnmaskedText().length != 10) {
+      showSnackBar('Please a Valid Phone Number');
+      return;
+    }
+    if (passwordController.text.length < 8) {
+      showSnackBar('Please a Valid Password');
+      return;
+    }
+    if (passwordController.text != passwordConfirmController.text) {
+      showSnackBar('Passwords do Not Match');
+      return;
+    }
+
+    registerUser();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final node = FocusScope.of(context);
     return WillPopScope(
       onWillPop: () async => false,
-      child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 70,
-                  ),
-                  Image.asset(
-                    'images/logo.png',
-                    height: 100.0,
-                    width: 100.0,
-                  ),
-                  SizedBox(
-                    height: 40.0,
-                  ),
-                  Text(
-                    'Create an Account',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      fontFamily: 'Brand-Bold',
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+          setState(() {
+            logoHeight = 200;
+            spaceHeight1 = 0;
+            spaceHeight2 = 30;
+          });
+        },
+        child: Scaffold(
+          key: scaffoldKey,
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: spaceHeight2,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: fullNameController,
-                          decoration: InputDecoration(
-                            labelText: 'Full Name',
-                            labelStyle: TextStyle(
-                              fontSize: 14.0,
-                            ),
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 10.0,
-                            ),
-                          ),
-                          style: TextStyle(fontSize: 14.0),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        TextField(
-                          controller: emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            labelText: 'Email Address',
-                            labelStyle: TextStyle(
-                              fontSize: 14.0,
-                            ),
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 10.0,
-                            ),
-                          ),
-                          style: TextStyle(fontSize: 14.0),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        TextField(
-                          inputFormatters: [maskFormatter],
-                          keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(
-                            labelText: 'Phone Number',
-                            labelStyle: TextStyle(
-                              fontSize: 14.0,
-                            ),
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 10.0,
-                            ),
-                          ),
-                          style: TextStyle(fontSize: 14.0),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        TextField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            labelStyle: TextStyle(
-                              fontSize: 14.0,
-                            ),
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 10.0,
-                            ),
-                          ),
-                          style: TextStyle(fontSize: 14.0),
-                        ),
-                        TextField(
-                          controller: passwordConfirmController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            labelText: 'Confirm Password',
-                            labelStyle: TextStyle(
-                              fontSize: 14.0,
-                            ),
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 10.0,
-                            ),
-                          ),
-                          style: TextStyle(fontSize: 14.0),
-                        ),
-                        SizedBox(
-                          height: 40,
-                        ),
-                        LargeButton(
-                          onPressed: () async {
-                            var connectivityResult =
-                                await Connectivity().checkConnectivity();
-                            if (connectivityResult !=
-                                    ConnectivityResult.mobile &&
-                                connectivityResult != ConnectivityResult.wifi) {
-                              showSnackBar('No Internet Connection');
-                            }
-                            if (fullNameController.text.length < 3) {
-                              showSnackBar('Please Provide a Valid Full Name');
-                              return;
-                            }
-                            if (!emailController.text.contains('@') &&
-                                !emailController.text.contains('.')) {
-                              showSnackBar('Please a Valid Email Address');
-                              return;
-                            }
-                            if (maskFormatter.getUnmaskedText().length != 10) {
-                              showSnackBar('Please a Valid Phone Number');
-                              return;
-                            }
-                            if (passwordController.text.length < 8) {
-                              showSnackBar('Please a Valid Password');
-                              return;
-                            }
-                            if (passwordController.text !=
-                                passwordConfirmController.text) {
-                              showSnackBar('Passwords do Not Match');
-                              return;
-                            }
-
-                            registerUser();
-                          },
-                          color: Colors.purple[900],
-                          title: 'REGISTER',
-                        ),
-                        SizedBox(
-                          height: 30.0,
-                        ),
-                        FlatButton(
-                          onPressed: () {
-                            Navigator.popAndPushNamed(context, LoginPage.id);
-                          },
-                          child: Text('Already Have an Account, Log In'),
-                        ),
-                      ],
+                    Image.asset(
+                      'images/logo.png',
+                      height: logoHeight,
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: spaceHeight1,
+                    ),
+                    Text(
+                      'Create an Account',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 25.0,
+                        fontFamily: 'Brand-Bold',
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children: [
+                          TextField(
+                            onTap: () {
+                              setState(() {
+                                logoHeight = 0;
+                              });
+                            },
+                            controller: fullNameController,
+                            onEditingComplete: () => node.nextFocus(),
+                            decoration: InputDecoration(
+                              labelText: 'Full Name',
+                              labelStyle: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 10.0,
+                              ),
+                            ),
+                            style: TextStyle(fontSize: 14.0),
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          TextField(
+                            onTap: () {
+                              setState(() {
+                                logoHeight = 0;
+                              });
+                            },
+                            controller: emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            onEditingComplete: () => node.nextFocus(),
+                            decoration: InputDecoration(
+                              labelText: 'Email Address',
+                              labelStyle: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 10.0,
+                              ),
+                            ),
+                            style: TextStyle(fontSize: 14.0),
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          TextField(
+                            onTap: () {
+                              setState(() {
+                                logoHeight = 0;
+                              });
+                            },
+                            inputFormatters: [maskFormatter],
+                            keyboardType: TextInputType.phone,
+                            onEditingComplete: () => node.nextFocus(),
+                            decoration: InputDecoration(
+                              labelText: 'Phone Number',
+                              labelStyle: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 10.0,
+                              ),
+                            ),
+                            style: TextStyle(fontSize: 14.0),
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          TextField(
+                            onTap: () {
+                              setState(() {
+                                logoHeight = 0;
+                              });
+                            },
+                            controller: passwordController,
+                            obscureText: true,
+                            onEditingComplete: () => node.nextFocus(),
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              labelStyle: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 10.0,
+                              ),
+                            ),
+                            style: TextStyle(fontSize: 14.0),
+                          ),
+                          TextField(
+                            onTap: () {
+                              setState(() {
+                                logoHeight = 0;
+                              });
+                            },
+                            controller: passwordConfirmController,
+                            obscureText: true,
+                            onEditingComplete: () async {
+                              buttonPressed();
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Confirm Password',
+                              labelStyle: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 10.0,
+                              ),
+                            ),
+                            style: TextStyle(fontSize: 14.0),
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          LargeButton(
+                            onPressed: () async {
+                              buttonPressed();
+                            },
+                            color: Colors.purple[900],
+                            title: 'REGISTER',
+                          ),
+                          SizedBox(
+                            height: 30.0,
+                          ),
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.popAndPushNamed(context, LoginPage.id);
+                            },
+                            child: Text('Already Have an Account, Log In'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
