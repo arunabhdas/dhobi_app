@@ -1,0 +1,47 @@
+name: dhobi_app
+description: A new Flutter project.
+
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  connectivity: ^3.0.2
+  firebase_core: ^1.0.0
+  firebase_auth: ^1.0.0
+  firebase_database: ^6.1.0
+  firebase_storage: ^8.0.0
+  mask_text_input_formatter: ^1.2.1
+  image_picker: ^0.7.2
+  path_provider: ^2.0.1
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+flutter:
+
+  
+  uses-material-design: true
+
+
+  assets:
+    - images/
+
+  fonts:
+    - family: Ubuntu
+      fonts:
+        - asset: fonts/Ubuntu-Regular.ttf
+    - family: Ubuntu-Bold
+      fonts:
+        - asset: fonts/Ubuntu-Bold.ttf
+    - family: Ubuntu-Light
+      fonts:
+        - asset: fonts/Ubuntu-Light.ttf
