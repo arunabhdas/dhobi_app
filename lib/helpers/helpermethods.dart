@@ -2,6 +2,7 @@ import 'package:dhobi_app/datamodels/OurUser.dart';
 import 'package:dhobi_app/global_variables.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class HelperMethods {
   static void getCurrentUserInfo() async {
@@ -14,18 +15,19 @@ class HelperMethods {
       currentUserInfo =
           snapshot.value != null ? OurUser.fromSnapshot(snapshot) : null;
     });
+
+    Reference storageRef =
+        FirebaseStorage.instance.ref().child('$userId/profilePic.png');
+    print(storageRef.getDownloadURL());
   }
 
-  // static Future<void> downloadProfilePicture() async {
-  //   Directory appDocDir = await getApplicationDocumentsDirectory();
-  //   File downloadToFile = File('${appDocDir.path}/images/profilePic.png');
-  //   print(appDocDir.path);
-  //   try {
-  //     await firebase_storage.FirebaseStorage.instance
-  //         .ref('uploads/logo.png')
-  //         .writeToFile(downloadToFile);
-  //   } on FirebaseException catch (e) {
-  //     print(e);
-  //   }
+  // static Future<String> getProfilePictureLink() async {
+  //   currentFirebaseUser = FirebaseAuth.instance.currentUser;
+  //   String userId = currentFirebaseUser.uid;
+
+  //   Reference storageRef =
+  //       FirebaseStorage.instance.ref().child('$userId/profilePic.png');
+  //   print(storageRef.getDownloadURL());
+  //   return storageRef.fullPath;
   // }
 }

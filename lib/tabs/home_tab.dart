@@ -1,4 +1,6 @@
+import 'package:dhobi_app/global_variables.dart';
 import 'package:dhobi_app/widgets/largeButton.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeTab extends StatelessWidget {
@@ -184,7 +186,15 @@ class HomeTab extends StatelessWidget {
             LargeButton(
               title: ' or Create a Custom Order',
               color: Colors.purple[900],
-              onPressed: () async {},
+              onPressed: () async {
+                User user = FirebaseAuth.instance.currentUser;
+
+                try {
+                  await user.sendEmailVerification();
+                } catch (e) {
+                  print(e);
+                }
+              },
             )
           ],
         ),

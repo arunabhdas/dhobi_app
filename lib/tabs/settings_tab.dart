@@ -4,10 +4,12 @@ import 'package:dhobi_app/screens/change_password_screen.dart';
 import 'package:dhobi_app/screens/login_page.dart';
 import 'package:dhobi_app/widgets/BrandDivider.dart';
 import 'package:dhobi_app/widgets/ConfirmSheet.dart';
+import 'package:dhobi_app/widgets/progressDialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SettingsTab extends StatefulWidget {
   @override
@@ -16,6 +18,8 @@ class SettingsTab extends StatefulWidget {
 
 class _SettingsTabState extends State<SettingsTab> {
   File newProfilePic;
+  String imageLink =
+      'https://firebasestorage.googleapis.com/v0/b/dhobiapp-ba6df.appspot.com/o/${currentUserInfo.id}%2FProfilePic?alt=media&token=$accessToken';
   var pic = AssetImage('images/profilePic.png');
   final picker = ImagePicker();
   firebase_storage.FirebaseStorage storage =
@@ -25,16 +29,25 @@ class _SettingsTabState extends State<SettingsTab> {
     var tempImage = await picker.getImage(source: ImageSource.gallery);
     if (tempImage != null) {
       newProfilePic = File(tempImage.path);
+      print(newProfilePic.path);
       try {
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) =>
+              ProgressDialog(status: 'Loading..'),
+        );
         firebase_storage.Reference ref = firebase_storage
             .FirebaseStorage.instance
             .ref()
             .child('${currentUserInfo.id}/ProfilePic');
         await ref.putFile(newProfilePic);
+        Navigator.pop(context);
       } catch (e) {
         print(e);
       }
     }
+    (context as Element).rebuild();
     return;
   }
 
@@ -83,11 +96,6 @@ class _SettingsTabState extends State<SettingsTab> {
                 height: 15,
               ),
               Center(
-                // child: CircleAvatar(
-                //   radius: 70,
-                //   backgroundImage: AssetImage('images/pp.jpg'),
-                //   //child: Icon(Icons.access_alarms),
-                // ),
                 child: CircleAvatar(
                   radius: 70.0,
                   backgroundColor: Colors.white,
@@ -98,6 +106,10 @@ class _SettingsTabState extends State<SettingsTab> {
                         onTap: () {
                           print('tapped');
                           getImage();
+                          setState(() {
+                            imageLink =
+                                'https://firebasestorage.googleapis.com/v0/b/dhobiapp-ba6df.appspot.com/o/${currentUserInfo.id}%2FProfilePic?alt=media&token=$accessToken';
+                          });
                         },
                         child: CircleAvatar(
                           backgroundColor: Colors.white,
@@ -112,8 +124,7 @@ class _SettingsTabState extends State<SettingsTab> {
                     ),
                     radius: 70.0,
                     //This is the user Profile, clicking this opens the user profile, add gesture detector
-
-                    backgroundImage: AssetImage('images/profilePic.png'),
+                    backgroundImage: NetworkImage(imageLink),
                   ),
                 ),
               ),
