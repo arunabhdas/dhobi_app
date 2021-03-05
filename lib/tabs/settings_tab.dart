@@ -9,7 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 
 class SettingsTab extends StatefulWidget {
   @override
@@ -18,6 +17,9 @@ class SettingsTab extends StatefulWidget {
 
 class _SettingsTabState extends State<SettingsTab> {
   File newProfilePic;
+  bool isChanged;
+  String localImageLink;
+  PickedFile _imageFile;
   String imageLink =
       'https://firebasestorage.googleapis.com/v0/b/dhobiapp-ba6df.appspot.com/o/${currentUserInfo.id}%2FProfilePic?alt=media&token=$accessToken';
   var pic = AssetImage('images/profilePic.png');
@@ -27,9 +29,13 @@ class _SettingsTabState extends State<SettingsTab> {
 
   Future getImage() async {
     var tempImage = await picker.getImage(source: ImageSource.gallery);
+    _imageFile = tempImage;
     if (tempImage != null) {
-      newProfilePic = File(tempImage.path);
+      setState(() {
+        newProfilePic = File(tempImage.path);
+      });
       print(newProfilePic.path);
+      localImageLink = newProfilePic.path;
       try {
         showDialog(
           barrierDismissible: false,
@@ -43,6 +49,9 @@ class _SettingsTabState extends State<SettingsTab> {
             .child('${currentUserInfo.id}/ProfilePic');
         await ref.putFile(newProfilePic);
         Navigator.pop(context);
+        setState(() {
+          isChanged = true;
+        });
       } catch (e) {
         print(e);
       }
@@ -123,8 +132,9 @@ class _SettingsTabState extends State<SettingsTab> {
                       ),
                     ),
                     radius: 70.0,
-                    //This is the user Profile, clicking this opens the user profile, add gesture detector
-                    backgroundImage: NetworkImage(imageLink),
+                    backgroundImage: isChanged == true
+                        ? FileImage(File(_imageFile.path))
+                        : NetworkImage(imageLink),
                   ),
                 ),
               ),
