@@ -278,7 +278,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           SizedBox(
                             height: 30.0,
                           ),
-                          FlatButton(
+                          TextButton(
                             onPressed: () {
                               Navigator.popAndPushNamed(context, LoginPage.id);
                             },

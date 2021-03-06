@@ -18,7 +18,7 @@ class HelperMethods {
 
     Reference storageRef =
         FirebaseStorage.instance.ref().child('$userId/profilePic.png');
-    print(storageRef.getDownloadURL());
+    print(storageRef.getData());
   }
 
   // static Future<String> getProfilePictureLink() async {

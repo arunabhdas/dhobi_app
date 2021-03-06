@@ -9,25 +9,30 @@ class LargeOutlineButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlineButton(
-        borderSide: BorderSide(color: color),
-        shape: new RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(25.0),
-        ),
-        onPressed: onPressed,
-        color: color,
-        textColor: color,
-        child: Container(
-          height: 50.0,
-          child: Center(
-            child: Text(
-              title,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontFamily: 'Brand-Bold',
-              ),
+    return OutlinedButton(
+      onPressed: onPressed,
+      child: Container(
+        height: 50.0,
+        child: Center(
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 20.0,
+              fontFamily: 'Brand-Bold',
             ),
           ),
-        ));
+        ),
+      ),
+      style: ButtonStyle(
+        textStyle: MaterialStateProperty.all(TextStyle(color: color)),
+        backgroundColor: MaterialStateProperty.all(color),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+            side: BorderSide(color: color),
+          ),
+        ),
+      ),
+    );
   }
 }

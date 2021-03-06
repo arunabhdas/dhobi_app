@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-
+//TODO: Update to Flutter 2.0.0
   void showSnackBar(String title) {
     final snackbar = SnackBar(
       content: Text(
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            FlatButton(
+                            TextButton(
                               onPressed: () async {
                                 showSnackBar(await Navigator.push(
                                     context,
@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(
                           height: 20.0,
                         ),
-                        FlatButton(
+                        TextButton(
                           onPressed: () {
                             Navigator.pushNamed(context, RegistrationPage.id);
                           },

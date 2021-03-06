@@ -9,13 +9,8 @@ class LargeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25.0),
-      ),
+    return ElevatedButton(
       onPressed: onPressed,
-      color: color,
-      textColor: Colors.white,
       child: Container(
         height: 50,
         child: Center(
@@ -27,6 +22,14 @@ class LargeButton extends StatelessWidget {
           ),
         ),
       ),
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(color),
+          textStyle: MaterialStateProperty.all(TextStyle(color: Colors.white)),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+          )),
     );
   }
 }

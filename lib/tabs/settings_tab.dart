@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:dhobi_app/global_variables.dart';
 import 'package:dhobi_app/screens/change_password_screen.dart';
 import 'package:dhobi_app/screens/login_page.dart';
@@ -8,6 +9,7 @@ import 'package:dhobi_app/widgets/progressDialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SettingsTab extends StatefulWidget {
@@ -19,7 +21,7 @@ class _SettingsTabState extends State<SettingsTab> {
   File newProfilePic;
   bool isChanged;
   String localImageLink;
-  PickedFile _imageFile;
+  File _imageFile;
   String imageLink =
       'https://firebasestorage.googleapis.com/v0/b/dhobiapp-ba6df.appspot.com/o/${currentUserInfo.id}%2FProfilePic?alt=media&token=$accessToken';
   var pic = AssetImage('images/profilePic.png');
@@ -28,7 +30,15 @@ class _SettingsTabState extends State<SettingsTab> {
       firebase_storage.FirebaseStorage.instance;
 
   Future getImage() async {
-    var tempImage = await picker.getImage(source: ImageSource.gallery);
+    var pickedImage = await picker.getImage(source: ImageSource.gallery);
+    File tempImage = await ImageCropper.cropImage(
+      sourcePath: pickedImage.path,
+      maxWidth: 500,
+      maxHeight: 500,
+      aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+      compressFormat: ImageCompressFormat.png,
+      compressQuality: 50,
+    );
     _imageFile = tempImage;
     if (tempImage != null) {
       setState(() {
