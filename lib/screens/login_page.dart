@@ -17,7 +17,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-//TODO: Update to Flutter 2.0.0
   void showSnackBar(String title) {
     final snackbar = SnackBar(
       content: Text(
@@ -26,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
         style: TextStyle(fontSize: 15),
       ),
     );
-    scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   var emailController = TextEditingController();

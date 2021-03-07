@@ -20,7 +20,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         style: TextStyle(fontSize: 15),
       ),
     );
-    scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   var newPasswordController = TextEditingController();

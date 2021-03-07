@@ -25,7 +25,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         style: TextStyle(fontSize: 15),
       ),
     );
-    scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   FirebaseAuth _auth = FirebaseAuth.instance;

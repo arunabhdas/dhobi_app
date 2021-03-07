@@ -19,7 +19,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         style: TextStyle(fontSize: 15),
       ),
     );
-    scaffoldKey.currentState.showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   var emailController = TextEditingController();
