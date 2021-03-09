@@ -32,6 +32,7 @@ class _SettingsTabState extends State<SettingsTab> {
   Future getImage() async {
     var pickedImage = await picker.getImage(source: ImageSource.gallery);
     File tempImage = await ImageCropper.cropImage(
+      cropStyle: CropStyle.circle,
       sourcePath: pickedImage.path,
       maxWidth: 500,
       maxHeight: 500,
