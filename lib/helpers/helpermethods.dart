@@ -15,19 +15,14 @@ class HelperMethods {
       currentUserInfo =
           snapshot.value != null ? OurUser.fromSnapshot(snapshot) : null;
     });
-
-    Reference storageRef =
-        FirebaseStorage.instance.ref().child('$userId/profilePic.png');
-    print(storageRef.getData());
   }
 
-  // static Future<String> getProfilePictureLink() async {
-  //   currentFirebaseUser = FirebaseAuth.instance.currentUser;
-  //   String userId = currentFirebaseUser.uid;
+  static Future<String> getProfilePictureLink() async {
+    currentFirebaseUser = FirebaseAuth.instance.currentUser;
+    String userId = currentFirebaseUser.uid;
 
-  //   Reference storageRef =
-  //       FirebaseStorage.instance.ref().child('$userId/profilePic.png');
-  //   print(storageRef.getDownloadURL());
-  //   return storageRef.fullPath;
-  // }
+    Reference storageRef =
+        FirebaseStorage.instance.ref().child('$userId/ProfilePic');
+    return storageRef.getDownloadURL();
+  }
 }

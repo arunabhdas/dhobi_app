@@ -39,7 +39,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   double logoHeight = 200;
   double spaceHeight1 = 40;
-  double spaceHeight2 = 70;
+  double spaceHeight2 = 20;
 
   void registerUser() async {
     showDialog(

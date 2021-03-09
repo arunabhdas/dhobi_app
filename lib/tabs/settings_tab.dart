@@ -4,7 +4,8 @@ import 'package:dhobi_app/global_variables.dart';
 import 'package:dhobi_app/screens/change_password_screen.dart';
 import 'package:dhobi_app/screens/login_page.dart';
 import 'package:dhobi_app/widgets/BrandDivider.dart';
-import 'package:dhobi_app/widgets/ConfirmSheet.dart';
+import 'package:dhobi_app/widgets/firebaseStroageImage.dart';
+import 'package:dhobi_app/widgets/ourDialog.dart';
 import 'package:dhobi_app/widgets/progressDialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -20,10 +21,9 @@ class SettingsTab extends StatefulWidget {
 class _SettingsTabState extends State<SettingsTab> {
   File newProfilePic;
   bool isChanged;
-  String localImageLink;
   File _imageFile;
-  String imageLink =
-      'https://firebasestorage.googleapis.com/v0/b/dhobiapp-ba6df.appspot.com/o/${currentUserInfo.id}%2FProfilePic?alt=media&token=$accessToken';
+  String imageLink;
+
   var pic = AssetImage('images/profilePic.png');
   final picker = ImagePicker();
   firebase_storage.FirebaseStorage storage =
@@ -44,8 +44,6 @@ class _SettingsTabState extends State<SettingsTab> {
       setState(() {
         newProfilePic = File(tempImage.path);
       });
-      print(newProfilePic.path);
-      localImageLink = newProfilePic.path;
       try {
         showDialog(
           barrierDismissible: false,
@@ -82,16 +80,18 @@ class _SettingsTabState extends State<SettingsTab> {
               child: GestureDetector(
                 child: Text('Sign Out'),
                 onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) => ConfirmSheet(
-                      title: 'Sign Out?',
-                      onPressed: () async {
-                        await FirebaseAuth.instance.signOut();
-                        Navigator.pushNamed(context, LoginPage.id);
-                      },
-                    ),
-                  );
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return OurDialog(
+                          title: 'Are You Sure You Want To Sign Out',
+                          buttonText: 'Sign Out',
+                          onTapped: () async {
+                            await FirebaseAuth.instance.signOut();
+                            Navigator.pushNamed(context, LoginPage.id);
+                          },
+                        );
+                      });
                 },
               ),
             ),
@@ -115,38 +115,72 @@ class _SettingsTabState extends State<SettingsTab> {
                 height: 15,
               ),
               Center(
-                child: CircleAvatar(
-                  radius: 70.0,
-                  backgroundColor: Colors.white,
-                  child: CircleAvatar(
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: GestureDetector(
-                        onTap: () {
-                          print('tapped');
-                          getImage();
-                          setState(() {
-                            imageLink =
-                                'https://firebasestorage.googleapis.com/v0/b/dhobiapp-ba6df.appspot.com/o/${currentUserInfo.id}%2FProfilePic?alt=media&token=$accessToken';
-                          });
-                        },
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 20.0,
-                          child: Icon(
-                            Icons.edit,
-                            size: 15.0,
-                            color: Colors.purple[900],
-                          ),
-                        ),
-                      ),
+                child: GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return OurDialog(
+                            title: 'Change Profile Picture',
+                            buttonText: 'Select Photo',
+                            onTapped: () {
+                              getImage();
+                              Navigator.pop(context);
+                            },
+                          );
+                        });
+                  },
+                  child: Container(
+                    height: 150,
+                    width: 150,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: isChanged == true
+                          ? Image.file(File(_imageFile.path))
+                          : FirebaseStorageImage(
+                              reference: profilePicRef,
+                              placeholderImage:
+                                  AssetImage('images/spinner.gif'),
+                              errorWidget: Container(),
+                            ),
                     ),
-                    radius: 70.0,
-                    backgroundImage: isChanged == true
-                        ? FileImage(File(_imageFile.path))
-                        : NetworkImage(imageLink),
+                    decoration: BoxDecoration(
+                      color: Colors.purple[900],
+                      shape: BoxShape.circle,
+                    ),
                   ),
                 ),
+                // child: CircleAvatar(
+                //   radius: 70.0,
+                //   backgroundColor: Colors.white,
+                //   child: CircleAvatar(
+                //     child: Align(
+                //       alignment: Alignment.bottomRight,
+                //       child: GestureDetector(
+                //         onTap: () {
+                //           getImage();
+                //         },
+                //         child: CircleAvatar(
+                //           backgroundColor: Colors.white,
+                //           radius: 20.0,
+                //           child: Icon(
+                //             Icons.edit,
+                //             size: 15.0,
+                //             color: Colors.purple[900],
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //     radius: 70.0,
+                //     foregroundImage: isChanged == true
+                //         ? FileImage(File(_imageFile.path))
+                //         : FirebaseStorageImage(
+                //             reference: profilePicRef,
+                //             fallbackWidget: Container(),
+                //             errorWidget: Container(),
+                //           ),
+                //   ),
+                // ),
               ),
               SizedBox(height: 25),
               BrandDivider(),
@@ -228,3 +262,5 @@ class _SettingsTabState extends State<SettingsTab> {
     );
   }
 }
+
+class FirebaseStorage {}

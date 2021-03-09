@@ -29,6 +29,7 @@ class _MainPageState extends State<MainPage>
     super.initState();
     tabController = TabController(length: 4, vsync: this);
     HelperMethods.getCurrentUserInfo();
+    //HelperMethods.getProfilePictureLink();
   }
 
   @override

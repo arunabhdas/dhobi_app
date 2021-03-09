@@ -16,20 +16,18 @@ class LargeButton extends StatelessWidget {
         child: Center(
           child: Text(
             title,
-            style: TextStyle(
-              fontSize: 20,
-            ),
+            style: TextStyle(color: Colors.white, fontSize: 20),
           ),
         ),
       ),
       style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(color),
-          textStyle: MaterialStateProperty.all(TextStyle(color: Colors.white)),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
-            ),
-          )),
+        backgroundColor: MaterialStateProperty.all<Color>(color),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+        ),
+      ),
     );
   }
 }
