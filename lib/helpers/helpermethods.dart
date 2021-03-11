@@ -14,15 +14,9 @@ class HelperMethods {
     userRef.once().then((DataSnapshot snapshot) {
       currentUserInfo =
           snapshot.value != null ? OurUser.fromSnapshot(snapshot) : null;
+      profilePicRef = FirebaseStorage.instance
+          .ref()
+          .child('${currentUserInfo.id}/ProfilePic');
     });
-  }
-
-  static Future<String> getProfilePictureLink() async {
-    currentFirebaseUser = FirebaseAuth.instance.currentUser;
-    String userId = currentFirebaseUser.uid;
-
-    Reference storageRef =
-        FirebaseStorage.instance.ref().child('$userId/ProfilePic');
-    return storageRef.getDownloadURL();
   }
 }

@@ -1,4 +1,3 @@
-import 'package:dhobi_app/global_variables.dart';
 import 'package:dhobi_app/widgets/BrandDivider.dart';
 import 'package:flutter/material.dart';
 

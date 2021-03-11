@@ -19,10 +19,23 @@ class SettingsTab extends StatefulWidget {
 }
 
 class _SettingsTabState extends State<SettingsTab> {
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  void showSnackBar(String title) {
+    final snackbar = SnackBar(
+      content: Text(
+        title,
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 15),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
   File newProfilePic;
   bool isChanged;
   File _imageFile;
   String imageLink;
+  User user = FirebaseAuth.instance.currentUser;
 
   var pic = AssetImage('images/profilePic.png');
   final picker = ImagePicker();
@@ -72,7 +85,7 @@ class _SettingsTabState extends State<SettingsTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // key: scaffoldKey,
+      key: scaffoldKey,
       appBar: AppBar(
         actions: [
           Center(
@@ -90,6 +103,7 @@ class _SettingsTabState extends State<SettingsTab> {
                           onTapped: () async {
                             await FirebaseAuth.instance.signOut();
                             Navigator.pushNamed(context, LoginPage.id);
+                            profilePicRef = null;
                           },
                         );
                       });
@@ -102,7 +116,7 @@ class _SettingsTabState extends State<SettingsTab> {
         shadowColor: Colors.black45,
         backgroundColor: Colors.white,
         title: Text(
-          'Edit Account',
+          'My Account',
           style: TextStyle(fontSize: 20, color: Colors.purple[900]),
         ),
       ),
@@ -146,42 +160,13 @@ class _SettingsTabState extends State<SettingsTab> {
                             ),
                     ),
                     decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('images/noProfilePic.png')),
                       color: Colors.purple[900],
                       shape: BoxShape.circle,
                     ),
                   ),
                 ),
-                // child: CircleAvatar(
-                //   radius: 70.0,
-                //   backgroundColor: Colors.white,
-                //   child: CircleAvatar(
-                //     child: Align(
-                //       alignment: Alignment.bottomRight,
-                //       child: GestureDetector(
-                //         onTap: () {
-                //           getImage();
-                //         },
-                //         child: CircleAvatar(
-                //           backgroundColor: Colors.white,
-                //           radius: 20.0,
-                //           child: Icon(
-                //             Icons.edit,
-                //             size: 15.0,
-                //             color: Colors.purple[900],
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //     radius: 70.0,
-                //     foregroundImage: isChanged == true
-                //         ? FileImage(File(_imageFile.path))
-                //         : FirebaseStorageImage(
-                //             reference: profilePicRef,
-                //             fallbackWidget: Container(),
-                //             errorWidget: Container(),
-                //           ),
-                //   ),
-                // ),
               ),
               SizedBox(height: 25),
               BrandDivider(),
@@ -214,6 +199,27 @@ class _SettingsTabState extends State<SettingsTab> {
               ),
               BrandDivider(),
               ListTile(
+                trailing: !user.emailVerified
+                    ? GestureDetector(
+                        child: Text(
+                          'VERIFY',
+                          style: TextStyle(
+                              color: Colors.deepOrangeAccent[700],
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Ubuntu-Regular'),
+                        ),
+                        onTap: () async {
+                          await user.sendEmailVerification();
+                          showSnackBar('Check your Email for Verification');
+                        },
+                      )
+                    : Text(
+                        'VERIFIED',
+                        style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Ubuntu-Regular'),
+                      ),
                 subtitle: Text(
                   '${currentUserInfo.email}',
                   style: TextStyle(
