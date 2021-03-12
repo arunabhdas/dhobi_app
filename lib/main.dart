@@ -1,3 +1,4 @@
+import 'package:dhobi_app/helpers/helpermethods.dart';
 import 'package:dhobi_app/screens/login_page.dart';
 import 'package:dhobi_app/screens/main_screen.dart';
 import 'package:dhobi_app/screens/registration_page.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'Ubuntu',
-        primarySwatch: Colors.purple,
+        primarySwatch: Colors.grey,
         primaryColor: Colors.purple[900],
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),

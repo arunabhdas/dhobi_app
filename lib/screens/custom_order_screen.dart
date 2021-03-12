@@ -1,3 +1,4 @@
+import 'package:dhobi_app/widgets/BrandDivider.dart';
 import 'package:dhobi_app/widgets/largeButton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -89,6 +90,20 @@ class _CustomOrderScreenState extends State<CustomOrderScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(height: 15),
+                    Container(height: 10, width: 200, child: BrandDivider()),
+                    TextButton.icon(
+                      onPressed: () => _selectDate(context),
+                      icon: Icon(Icons.local_laundry_service_sharp,
+                          color: Colors.purple[900]),
+                      label: Text(
+                        "Select Pickup Date",
+                        style: TextStyle(color: Colors.purple[900]),
+                      ),
+                    ),
+                    Container(height: 10, width: 200, child: BrandDivider()),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Text(
                       'Your Laundry Will Be Picked Up On:',
                       style: TextStyle(
@@ -97,20 +112,18 @@ class _CustomOrderScreenState extends State<CustomOrderScreen> {
                         fontFamily: 'Ubuntu',
                       ),
                     ),
-                    TextButton(
-                      onPressed: () => openDateChanger(),
-                      child: Text(
-                        "${DateFormat('EEEE, MMMM d').format(selectedPickupDate)}",
-                        style: TextStyle(
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Ubuntu',
-                          color: Colors.purple[900],
-                        ),
+                    SizedBox(height: 10),
+                    Text(
+                      "${DateFormat('EEEE, MMMM d').format(selectedPickupDate)}",
+                      style: TextStyle(
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Ubuntu',
+                        color: Colors.purple[900],
                       ),
                     ),
                     SizedBox(
-                      height: 20.0,
+                      height: 35.0,
                     ),
                     Text(
                       'And Delivered On:',
@@ -119,19 +132,24 @@ class _CustomOrderScreenState extends State<CustomOrderScreen> {
                           fontSize: 15,
                           fontFamily: 'Ubuntu'),
                     ),
-                    TextButton(
-                      onPressed: () => openDateChanger(),
-                      child: Text(
-                        '${DateFormat('EEEE, MMMM d').format(selectedPickupDate.add((selectedPickupDate.weekday != 5) ? Duration(days: 1) : Duration(days: 2)))}',
-                        style: TextStyle(
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Ubuntu',
-                          color: Colors.purple[900],
-                        ),
+                    SizedBox(height: 10),
+                    Text(
+                      '${DateFormat('EEEE, MMMM d').format(selectedPickupDate.add((selectedPickupDate.weekday != 5) ? Duration(days: 1) : Duration(days: 2)))}',
+                      style: TextStyle(
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Ubuntu',
+                        color: Colors.purple[900],
                       ),
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(height: 25),
+                    Text(
+                      'Note : Pickup and Delivery will be anytime between 8AM to 10PM',
+                      style: TextStyle(
+                          color: Colors.purple[900],
+                          fontSize: 13,
+                          fontFamily: 'Ubuntu'),
+                    ),
                     TextField(
                       controller: instructionFieldController,
                       keyboardType: TextInputType.multiline,
@@ -175,11 +193,11 @@ class _CustomOrderScreenState extends State<CustomOrderScreen> {
                       title: 'PLACE ORDER',
                       color: Colors.purple[900],
                       onPressed: () {
-                        print(selectedPickupDate);
-                        print(selectedPickupDate.add(
-                            (selectedPickupDate.weekday != 5)
-                                ? Duration(days: 1)
-                                : Duration(days: 2)));
+                        // print(selectedPickupDate);
+                        // print(selectedPickupDate.add(
+                        //     (selectedPickupDate.weekday != 5)
+                        //         ? Duration(days: 1)
+                        //         : Duration(days: 2)));
                       },
                     )
                   ],

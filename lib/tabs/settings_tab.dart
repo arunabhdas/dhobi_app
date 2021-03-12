@@ -92,7 +92,8 @@ class _SettingsTabState extends State<SettingsTab> {
             child: Padding(
               padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
-                child: Text('Sign Out'),
+                child: Text('Sign Out',
+                    style: TextStyle(color: Colors.purple[900])),
                 onTap: () {
                   showDialog(
                       context: context,
