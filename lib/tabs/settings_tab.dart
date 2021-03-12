@@ -201,24 +201,32 @@ class _SettingsTabState extends State<SettingsTab> {
               ListTile(
                 trailing: !user.emailVerified
                     ? GestureDetector(
-                        child: Text(
-                          'VERIFY',
-                          style: TextStyle(
-                              color: Colors.deepOrangeAccent[700],
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'Ubuntu-Regular'),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            'VERIFY',
+                            style: TextStyle(
+                                color: Colors.deepOrangeAccent[700],
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Ubuntu-Regular'),
+                          ),
                         ),
                         onTap: () async {
                           await user.sendEmailVerification();
                           showSnackBar('Check your Email for Verification');
                         },
                       )
-                    : Text(
-                        'VERIFIED',
-                        style: TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Ubuntu-Regular'),
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 25.0),
+                        child: Text(
+                          'VERIFIED',
+                          style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Ubuntu-Regular'),
+                        ),
                       ),
                 subtitle: Text(
                   '${currentUserInfo.email}',

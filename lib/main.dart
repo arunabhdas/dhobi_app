@@ -18,7 +18,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'Ubuntu',
-        primarySwatch: Colors.grey,
+        primarySwatch: Colors.purple,
+        primaryColor: Colors.purple[900],
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: FirebaseAuth.instance.currentUser == null

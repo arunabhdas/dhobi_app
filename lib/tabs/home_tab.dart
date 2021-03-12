@@ -1,8 +1,21 @@
+import 'package:dhobi_app/screens/custom_order_screen.dart';
 import 'package:dhobi_app/widgets/largeButton.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class HomeTab extends StatelessWidget {
+class HomeTab extends StatefulWidget {
+  @override
+  _HomeTabState createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<HomeTab> {
+  DateTime tommorowDate = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      (DateTime.now().weekday != 5)
+          ? DateTime.now().day + 1
+          : DateTime.now().day + 2);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,7 +157,7 @@ class HomeTab extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Thursday, February 11',
+                            '${DateFormat('EEEE, MMMM d').format(tommorowDate)}',
                             style: TextStyle(fontFamily: 'Ubuntu-Bold'),
                           ),
                           Text(
@@ -168,7 +181,7 @@ class HomeTab extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Thursday, February 11',
+                          '${DateFormat('EEEE, MMMM d').format(tommorowDate.add((tommorowDate.weekday != 5) ? Duration(days: 1) : Duration(days: 2)))}',
                           style: TextStyle(fontFamily: 'Ubuntu-Bold'),
                         ),
                         Text(
@@ -185,14 +198,11 @@ class HomeTab extends StatelessWidget {
             LargeButton(
               title: ' or Create a Custom Order',
               color: Colors.purple[900],
-              onPressed: () async {
-                User user = FirebaseAuth.instance.currentUser;
-
-                try {
-                  await user.sendEmailVerification();
-                } catch (e) {
-                  print(e);
-                }
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CustomOrderScreen()),
+                );
               },
             )
           ],
