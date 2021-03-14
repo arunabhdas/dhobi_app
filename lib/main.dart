@@ -1,6 +1,5 @@
-import 'package:dhobi_app/helpers/helpermethods.dart';
 import 'package:dhobi_app/screens/login_page.dart';
-import 'package:dhobi_app/screens/main_screen.dart';
+import 'package:dhobi_app/screens/main_page.dart';
 import 'package:dhobi_app/screens/registration_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';

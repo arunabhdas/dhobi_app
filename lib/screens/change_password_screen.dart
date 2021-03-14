@@ -65,81 +65,78 @@ class _ChangePasswordState extends State<ChangePassword> {
           style: TextStyle(fontSize: 20, color: Colors.purple[900]),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  TextField(
-                    controller: oldPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'Current Password',
-                      labelStyle: TextStyle(
-                        fontSize: 14.0,
-                      ),
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 10.0,
-                      ),
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                TextField(
+                  controller: oldPasswordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Current Password',
+                    labelStyle: TextStyle(
+                      fontSize: 14.0,
                     ),
-                    style: TextStyle(fontSize: 14.0),
-                  ),
-                  TextField(
-                    controller: newPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      labelStyle: TextStyle(
-                        fontSize: 14.0,
-                      ),
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 10.0,
-                      ),
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 10.0,
                     ),
-                    style: TextStyle(fontSize: 14.0),
                   ),
-                  TextField(
-                    controller: newPasswordConfirmController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'Confirm Password',
-                      labelStyle: TextStyle(
-                        fontSize: 14.0,
-                      ),
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 10.0,
-                      ),
+                  style: TextStyle(fontSize: 14.0),
+                ),
+                TextField(
+                  controller: newPasswordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    labelStyle: TextStyle(
+                      fontSize: 14.0,
                     ),
-                    style: TextStyle(fontSize: 14.0),
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 10.0,
+                    ),
                   ),
-                ],
-              ),
+                  style: TextStyle(fontSize: 14.0),
+                ),
+                TextField(
+                  controller: newPasswordConfirmController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Confirm Password',
+                    labelStyle: TextStyle(
+                      fontSize: 14.0,
+                    ),
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 10.0,
+                    ),
+                  ),
+                  style: TextStyle(fontSize: 14.0),
+                ),
+              ],
             ),
-            Padding(
-              padding: EdgeInsets.all(20.0),
-              child: LargeButton(
-                color: Colors.purple[900],
-                title: 'Confirm',
-                onPressed: () {
-                  if (newPasswordController.text !=
-                      newPasswordConfirmController.text) {
-                    showSnackBar('Passwords Do Not Match');
-                    return;
-                  }
-                  reAuthandChangePassword(
-                      oldPasswordController.text, newPasswordController.text);
-                },
-              ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(20.0),
+            child: LargeButton(
+              color: Colors.purple[900],
+              title: 'Confirm',
+              onPressed: () {
+                if (newPasswordController.text !=
+                    newPasswordConfirmController.text) {
+                  showSnackBar('Passwords Do Not Match');
+                  return;
+                }
+                reAuthandChangePassword(
+                    oldPasswordController.text, newPasswordController.text);
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

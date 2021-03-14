@@ -1,6 +1,7 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:dhobi_app/global_variables.dart';
 import 'package:dhobi_app/screens/login_page.dart';
+import 'package:dhobi_app/screens/registration_page_more_info.dart';
 import 'package:dhobi_app/widgets/largeButton.dart';
 import 'package:dhobi_app/widgets/progressDialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -46,7 +47,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) =>
-          ProgressDialog(status: 'Logging You In'),
+          ProgressDialog(status: 'Registering You'),
     );
     UserCredential user = await _auth
         .createUserWithEmailAndPassword(
@@ -70,7 +71,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
       currentFirebaseUser = user.user;
 
-      Navigator.pushNamed(context, LoginPage.id);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => RegistrationMorePage()));
     }
   }
 

@@ -32,6 +32,8 @@ class _CustomOrderScreenState extends State<CustomOrderScreen> {
     return buildMaterialDatePicker(context);
   }
 
+  void createLaundryRequest() {}
+
   /// Material Picker
   buildMaterialDatePicker(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -143,13 +145,13 @@ class _CustomOrderScreenState extends State<CustomOrderScreen> {
                       ),
                     ),
                     SizedBox(height: 25),
-                    Text(
-                      'Note : Pickup and Delivery will be anytime between 8AM to 10PM',
-                      style: TextStyle(
-                          color: Colors.purple[900],
-                          fontSize: 13,
-                          fontFamily: 'Ubuntu'),
-                    ),
+                    // Text(
+                    //   '**Pickup and Delivery will be anytime between 8AM to 10PM, Laundry Will Be Delivered next Business Day',
+                    //   style: TextStyle(
+                    //       color: Colors.purple[900],
+                    //       fontSize: 12,
+                    //       fontFamily: 'Ubuntu'),
+                    // ),
                     TextField(
                       controller: instructionFieldController,
                       keyboardType: TextInputType.multiline,
@@ -199,7 +201,7 @@ class _CustomOrderScreenState extends State<CustomOrderScreen> {
                         //         ? Duration(days: 1)
                         //         : Duration(days: 2)));
                       },
-                    )
+                    ),
                   ],
                 )),
           ),

@@ -44,42 +44,47 @@ class _SettingsTabState extends State<SettingsTab> {
 
   Future getImage() async {
     var pickedImage = await picker.getImage(source: ImageSource.gallery);
-    File tempImage = await ImageCropper.cropImage(
-      cropStyle: CropStyle.circle,
-      sourcePath: pickedImage.path,
-      maxWidth: 500,
-      maxHeight: 500,
-      aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
-      compressFormat: ImageCompressFormat.png,
-      compressQuality: 50,
-    );
-    _imageFile = tempImage;
-    if (tempImage != null) {
-      setState(() {
-        newProfilePic = File(tempImage.path);
-      });
-      try {
-        showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (BuildContext context) =>
-              ProgressDialog(status: 'Loading..'),
-        );
-        firebase_storage.Reference ref = firebase_storage
-            .FirebaseStorage.instance
-            .ref()
-            .child('${currentUserInfo.id}/ProfilePic');
-        await ref.putFile(newProfilePic);
-        Navigator.pop(context);
+    if (pickedImage != null) {
+      //wrapped inside a if to prevent runtime error, test on a real device.
+      File tempImage = await ImageCropper.cropImage(
+        cropStyle: CropStyle.circle,
+        sourcePath: pickedImage.path,
+        maxWidth: 500,
+        maxHeight: 500,
+        aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+        compressFormat: ImageCompressFormat.png,
+        compressQuality: 50,
+      );
+      _imageFile = tempImage;
+      if (tempImage != null) {
         setState(() {
-          isChanged = true;
+          newProfilePic = File(tempImage.path);
         });
-      } catch (e) {
-        print(e);
+        try {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) =>
+                ProgressDialog(status: 'Loading..'),
+          );
+          firebase_storage.Reference ref = firebase_storage
+              .FirebaseStorage.instance
+              .ref()
+              .child('${currentUserInfo.id}/ProfilePic');
+          await ref.putFile(newProfilePic);
+          Navigator.pop(context);
+          setState(() {
+            isChanged = true;
+          });
+        } catch (e) {
+          print(e);
+        }
+      } else {
+        return;
       }
+      (context as Element).rebuild();
+      return;
     }
-    (context as Element).rebuild();
-    return;
   }
 
   @override
