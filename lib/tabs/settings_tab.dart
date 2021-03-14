@@ -205,6 +205,21 @@ class _SettingsTabState extends State<SettingsTab> {
               ),
               BrandDivider(),
               ListTile(
+                subtitle: Text(
+                  '${currentUserInfo.streetAddress}, ${currentUserInfo.city}',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.purple[900],
+                  ),
+                ),
+                title: Text(
+                  'Address',
+                  style: TextStyle(color: Colors.black54, fontSize: 13),
+                ),
+                //Add change address in trailing
+              ),
+              BrandDivider(),
+              ListTile(
                 trailing: !user.emailVerified
                     ? GestureDetector(
                         child: Padding(
