@@ -1,5 +1,7 @@
+import 'package:dhobi_app/global_variables.dart';
 import 'package:dhobi_app/widgets/BrandDivider.dart';
 import 'package:dhobi_app/widgets/largeButton.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -32,16 +34,41 @@ class _CustomOrderScreenState extends State<CustomOrderScreen> {
     return buildMaterialDatePicker(context);
   }
 
-  void createLaundryRequest() {}
+  void createLaundryRequest() {
+    DatabaseReference laundryRef =
+        FirebaseDatabase.instance.reference().child('laundryRequest').push();
+
+    Map requestMap = {
+      'created_at': DateTime.now().toString(),
+      'pickupDate': selectedPickupDate.toString(),
+      'deliveryDate': selectedPickupDate
+          .add((selectedPickupDate.weekday != 5)
+              ? Duration(days: 1)
+              : Duration(days: 2))
+          .toString(),
+      'userId': currentUserInfo.id,
+      'userFullName': currentUserInfo.fullName,
+      'userPhone': currentUserInfo.phone,
+      'userAddress': currentUserInfo.streetAddress,
+      'userCity': currentUserInfo.city,
+      'userAddressDetail': currentUserInfo.addressDetail,
+      'driver_instruction': driverFieldController.text,
+      'instruction': instructionFieldController.text,
+      'paymentMethod': 'CoD',
+      'status': 'waiting'
+    };
+
+    laundryRef.set(requestMap);
+    Navigator.pop(context);
+  }
 
   /// Material Picker
   buildMaterialDatePicker(BuildContext context) async {
     final DateTime picked = await showDatePicker(
+      helpText: 'Select Pickup Date',
       context: context,
       selectableDayPredicate: (date) {
-        // Disable weekend days to select from the calendar
         if (date.weekday == 6 || date.isBefore(nextDate)) {
-          //date.month < DateTime.now().month) {
           return false;
         }
         return true;
@@ -64,9 +91,6 @@ class _CustomOrderScreenState extends State<CustomOrderScreen> {
 
   void openDateChanger() {
     _selectDate(context);
-    setState(() {
-      buttonText = 'Change Date';
-    });
   }
 
   @override
@@ -195,11 +219,7 @@ class _CustomOrderScreenState extends State<CustomOrderScreen> {
                       title: 'PLACE ORDER',
                       color: Colors.purple[900],
                       onPressed: () {
-                        // print(selectedPickupDate);
-                        // print(selectedPickupDate.add(
-                        //     (selectedPickupDate.weekday != 5)
-                        //         ? Duration(days: 1)
-                        //         : Duration(days: 2)));
+                        createLaundryRequest();
                       },
                     ),
                   ],

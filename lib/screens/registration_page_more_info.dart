@@ -1,4 +1,3 @@
-import 'package:dhobi_app/screens/login_page.dart';
 import 'package:dhobi_app/screens/main_page.dart';
 import 'package:dhobi_app/widgets/largeButton.dart';
 import 'package:firebase_database/firebase_database.dart';

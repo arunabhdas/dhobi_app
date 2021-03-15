@@ -9,14 +9,15 @@ class OurUser {
   String streetAddress;
   String addressDetail;
 
-  OurUser(
-      {this.email,
-      this.fullName,
-      this.phone,
-      this.id,
-      this.city,
-      this.streetAddress,
-      this.addressDetail});
+  OurUser({
+    this.email,
+    this.fullName,
+    this.phone,
+    this.id,
+    this.city,
+    this.streetAddress,
+    this.addressDetail,
+  });
 
   OurUser.fromSnapshot(DataSnapshot snapshot) {
     id = snapshot.key;
