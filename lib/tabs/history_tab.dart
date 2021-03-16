@@ -1,4 +1,6 @@
 import 'package:dhobi_app/datamodels/OrderDetails.dart';
+import 'package:dhobi_app/global_variables.dart';
+import 'package:dhobi_app/widgets/BrandDivider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +18,11 @@ class _HistoryTabState extends State<HistoryTab> {
   @override
   void initState() {
     super.initState();
-    dbRef.once().then((DataSnapshot snapshot) {
+    dbRef
+        .orderByChild('userId')
+        .equalTo(currentUserInfo.id)
+        .once()
+        .then((DataSnapshot snapshot) {
       var data = snapshot.value;
       _list.clear();
       data.forEach((key, value) {
@@ -36,7 +42,7 @@ class _HistoryTabState extends State<HistoryTab> {
             value['userFullName'],
             value['UserPhone']);
         _list.add(orderDetails);
-        print(orderDetails.pickupDate);
+        _list.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       });
       setState(() {});
     });
@@ -57,93 +63,45 @@ class _HistoryTabState extends State<HistoryTab> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
-          //TODO: shows everyone's order, need to show user order only.
+          //todo: need to refactor this code into another widget
           child: (_list.length == 0)
-              ? Text('No Data')
+              ? Text('Loading...')
               : ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: _list.length,
                   itemBuilder: (_, index) {
-                    return ListTile(
-                      subtitle: Text(
-                        '${_list[index].userAddress}',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.purple[900],
+                    return Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            print(_list[index].key);
+                          },
+                          child: ListTile(
+                            subtitle: Text(
+                              '${_list[index].userAddress}',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.purple[900],
+                              ),
+                            ),
+                            title: Text(
+                              '${_list[index].createdAt}',
+                              style: TextStyle(
+                                  color: Colors.black54, fontSize: 13),
+                            ),
+                            trailing: Text(
+                              '${_list[index].status}'.split(' ')[0],
+                              style: TextStyle(
+                                  color: Colors.black54, fontSize: 13),
+                            ),
+                          ),
                         ),
-                      ),
-                      title: Text(
-                        '${_list[index].createdAt}',
-                        style: TextStyle(color: Colors.black54, fontSize: 13),
-                      ),
-                      trailing: Text(
-                        '${_list[index].status}'.split(' ')[0],
-                        style: TextStyle(color: Colors.black54, fontSize: 13),
-                      ),
+                        (_list.length != 0) ? BrandDivider() : Container(),
+                      ],
                     );
-                    //return Text(_list[index].status);
                   },
                 ),
-          // child: Column(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   children: [
-          //     ListTile(
-          //       subtitle: Text(
-          //         'Laundry Order',
-          //         style: TextStyle(
-          //           fontSize: 20,
-          //           color: Colors.purple[900],
-          //         ),
-          //       ),
-          //       title: Text(
-          //         '11/21/2020',
-          //         style: TextStyle(color: Colors.black54, fontSize: 13),
-          //       ),
-          //       trailing: Icon(
-          //         Icons.arrow_forward_ios_sharp,
-          //         color: Colors.black54,
-          //       ),
-          //     ),
-          //     BrandDivider(),
-          //     ListTile(
-          //       subtitle: Text(
-          //         'Laundry Order, Dry Cleaning',
-          //         style: TextStyle(
-          //           fontSize: 20,
-          //           color: Colors.purple[900],
-          //         ),
-          //       ),
-          //       trailing: Icon(
-          //         Icons.arrow_forward_ios_sharp,
-          //         color: Colors.black54,
-          //       ),
-          //       title: Text(
-          //         '10/08/2020',
-          //         style: TextStyle(color: Colors.black54, fontSize: 13),
-          //       ),
-          //     ),
-          //     BrandDivider(),
-          //     ListTile(
-          //       subtitle: Text(
-          //         'Polishing',
-          //         style: TextStyle(
-          //           fontSize: 20,
-          //           color: Colors.purple[900],
-          //         ),
-          //       ),
-          //       title: Text(
-          //         '22/05/2019',
-          //         style: TextStyle(color: Colors.black54, fontSize: 13),
-          //       ),
-          //       trailing: Icon(
-          //         Icons.arrow_forward_ios_sharp,
-          //         color: Colors.black54,
-          //       ),
-          //     ),
-          //     BrandDivider(),
-          //   ],
-          // ),
         ),
       ),
     );
