@@ -1,5 +1,8 @@
+import 'package:dhobi_app/global_variables.dart';
 import 'package:dhobi_app/screens/custom_order_screen.dart';
 import 'package:dhobi_app/widgets/largeButton.dart';
+import 'package:dhobi_app/widgets/ourDialog.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -9,6 +12,46 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  void showSnackBar(String title) {
+    final snackbar = SnackBar(
+      content: Text(
+        title,
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 15),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
+  void createLaundryRequest() {
+    DatabaseReference laundryRef =
+        FirebaseDatabase.instance.reference().child('laundryRequest').push();
+
+    Map requestMap = {
+      'created_at': DateTime.now().toString(),
+      'pickupDate': tommorowDate.toString(),
+      'deliveryDate': tommorowDate
+          .add((tommorowDate.weekday != 5)
+              ? Duration(days: 1)
+              : Duration(days: 2))
+          .toString(),
+      'userId': currentUserInfo.id,
+      'userFullName': currentUserInfo.fullName,
+      'userPhone': currentUserInfo.phone,
+      'userAddress': currentUserInfo.streetAddress,
+      'userCity': currentUserInfo.city,
+      'userAddressDetail': currentUserInfo.addressDetail,
+      'driver_instruction': '',
+      'instruction': '',
+      'paymentMethod': 'CoD',
+      'status': 'waiting'
+    };
+    laundryRef.set(requestMap);
+    showSnackBar('Order Placed Succesfully!');
+  }
+
   DateTime tommorowDate = DateTime(
       DateTime.now().year,
       DateTime.now().month,
@@ -35,6 +78,7 @@ class _HomeTabState extends State<HomeTab> {
           children: [
             SizedBox(
               width: double.infinity,
+              height: 20,
             ),
             Text(
               'Standard One Day Service',
@@ -45,103 +89,118 @@ class _HomeTabState extends State<HomeTab> {
               ),
             ),
             SizedBox(
-              height: 30.0,
+              height: 45.0,
             ),
-            Container(
-              width: 275,
-              decoration: BoxDecoration(
-                  color: Colors.purple[900],
-                  borderRadius: BorderRadius.all(Radius.circular(6)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black38,
-                      blurRadius: 5,
-                      spreadRadius: 0.5,
-                      offset: Offset(0.7, 0.7),
-                    )
-                  ]),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.touch_app,
-                      size: 60,
-                      color: Colors.white,
-                    ),
-                    SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'One Touch',
-                          style: TextStyle(
-                            fontSize: 35,
-                            color: Colors.white,
+            GestureDetector(
+              onTap: () => showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return OurDialog(
+                    title: 'Confirm Place a Quick Order',
+                    buttonText: 'Place Order',
+                    onTapped: () {
+                      createLaundryRequest();
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+              ),
+              child: Container(
+                width: 275,
+                decoration: BoxDecoration(
+                    color: Colors.purple[900],
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black38,
+                        blurRadius: 5,
+                        spreadRadius: 0.5,
+                        offset: Offset(0.7, 0.7),
+                      )
+                    ]),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.touch_app,
+                        size: 60,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'One Touch',
+                            style: TextStyle(
+                              fontSize: 35,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        Text(
-                          ' Pickup from the Door',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    )
-                  ],
+                          Text(
+                            ' Pickup from the Door',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
+            // SizedBox(
+            //   height: 25.0,
+            // ),
+            // Container(
+            //   width: 275,
+            //   decoration: BoxDecoration(
+            //       color: Colors.purple[900],
+            //       borderRadius: BorderRadius.all(Radius.circular(6)),
+            //       boxShadow: [
+            //         BoxShadow(
+            //           color: Colors.black38,
+            //           blurRadius: 5,
+            //           spreadRadius: 0.5,
+            //           offset: Offset(0.7, 0.7),
+            //         )
+            //       ]),
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: Row(
+            //       children: [
+            //         Icon(
+            //           Icons.touch_app,
+            //           size: 60,
+            //           color: Colors.white,
+            //         ),
+            //         SizedBox(width: 10),
+            //         Column(
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: [
+            //             Text(
+            //               'One Touch',
+            //               style: TextStyle(
+            //                 fontSize: 35,
+            //                 color: Colors.white,
+            //               ),
+            //             ),
+            //             Text(
+            //               ' Knock on The Door',
+            //               style: TextStyle(color: Colors.white),
+            //             ),
+            //           ],
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
             SizedBox(
-              height: 15.0,
-            ),
-            Container(
-              width: 275,
-              decoration: BoxDecoration(
-                  color: Colors.purple[900],
-                  borderRadius: BorderRadius.all(Radius.circular(6)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black38,
-                      blurRadius: 5,
-                      spreadRadius: 0.5,
-                      offset: Offset(0.7, 0.7),
-                    )
-                  ]),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.touch_app,
-                      size: 60,
-                      color: Colors.white,
-                    ),
-                    SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'One Touch',
-                          style: TextStyle(
-                            fontSize: 35,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          ' Knock on The Door',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 30.0,
+              height: 45.0,
             ),
             Text('With One Tap, Your Order Will Be:'),
             SizedBox(
-              height: 20.0,
+              height: 30.0,
             ),
             Container(
               width: 330,
@@ -194,7 +253,7 @@ class _HomeTabState extends State<HomeTab> {
                 ],
               ),
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 45),
             LargeButton(
               title: ' or Create a Custom Order',
               color: Colors.purple[900],

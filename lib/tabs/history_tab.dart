@@ -65,7 +65,8 @@ class _HistoryTabState extends State<HistoryTab> {
           padding: EdgeInsets.all(16.0),
           //todo: need to refactor this code into another widget
           child: (_list.length == 0)
-              ? Text('Loading...')
+              ? Center(
+                  child: Text('Looks Like You Haven\'t Tried Our Service Yet'))
               : ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
@@ -79,25 +80,43 @@ class _HistoryTabState extends State<HistoryTab> {
                           },
                           child: ListTile(
                             subtitle: Text(
-                              '${_list[index].userAddress}',
+                              'Pickup: ' +
+                                  '${_list[index].pickupDate}.'.split(' ')[0],
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.purple[900],
                               ),
                             ),
                             title: Text(
-                              '${_list[index].createdAt}',
+                              'Order Placed : ' +
+                                  '${_list[index].createdAt}.'.split(' ')[0],
                               style: TextStyle(
                                   color: Colors.black54, fontSize: 13),
                             ),
-                            trailing: Text(
-                              '${_list[index].status}'.split(' ')[0],
-                              style: TextStyle(
-                                  color: Colors.black54, fontSize: 13),
-                            ),
+                            trailing: (_list[index].status != 'canceled')
+                                ? Text(
+                                    '${_list[index].status.toUpperCase()}'
+                                        .split(' ')[0],
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.green,
+                                      fontFamily: 'Ubunty-Bold',
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  )
+                                : Text(
+                                    '${_list[index].status.toUpperCase()}'
+                                        .split(' ')[0],
+                                    style: TextStyle(
+                                      color: Colors.deepOrange[700],
+                                      fontFamily: 'Ubunty-Bold',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13,
+                                    ),
+                                  ),
                           ),
                         ),
-                        (_list.length != 0) ? BrandDivider() : Container(),
+                        BrandDivider(),
                       ],
                     );
                   },

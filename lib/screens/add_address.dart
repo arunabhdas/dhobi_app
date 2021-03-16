@@ -4,12 +4,14 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:dhobi_app/global_variables.dart';
 
-class RegistrationMorePage extends StatefulWidget {
+class AddAddress extends StatefulWidget {
+  final bool editingAddress;
+  AddAddress({@required this.editingAddress});
   @override
-  _RegistrationMorePageState createState() => _RegistrationMorePageState();
+  _AddAddressState createState() => _AddAddressState();
 }
 
-class _RegistrationMorePageState extends State<RegistrationMorePage> {
+class _AddAddressState extends State<AddAddress> {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   void showSnackBar(String title) {
     final snackbar = SnackBar(
@@ -40,7 +42,11 @@ class _RegistrationMorePageState extends State<RegistrationMorePage> {
       'address_detail': addressDetailsController.text,
     };
     addressRef.set(map);
-    Navigator.pushNamed(context, MainPage.id);
+    (widget.editingAddress)
+        ? Navigator.pushNamed(context, MainPage.id)
+        : Navigator.pop(context);
+    currentUserInfo.streetAddress = addressController.text;
+    currentUserInfo.city = _selectedLocation;
   }
 
   void buttonPress() {
@@ -59,7 +65,7 @@ class _RegistrationMorePageState extends State<RegistrationMorePage> {
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async => (widget.editingAddress) ? false : true,
       child: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
         child: Scaffold(
@@ -68,10 +74,15 @@ class _RegistrationMorePageState extends State<RegistrationMorePage> {
             elevation: 1,
             shadowColor: Colors.black45,
             backgroundColor: Colors.white,
-            title: Text(
-              'Additional Details',
-              style: TextStyle(fontSize: 20, color: Colors.purple[900]),
-            ),
+            title: (widget.editingAddress)
+                ? Text(
+                    'Add Your Address',
+                    style: TextStyle(fontSize: 20, color: Colors.purple[900]),
+                  )
+                : Text(
+                    'Change Your Address',
+                    style: TextStyle(fontSize: 20, color: Colors.purple[900]),
+                  ),
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),

@@ -57,9 +57,8 @@ class _CustomOrderScreenState extends State<CustomOrderScreen> {
       'paymentMethod': 'CoD',
       'status': 'waiting'
     };
-
     laundryRef.set(requestMap);
-    Navigator.pop(context);
+    Navigator.pop(context, 'succesful');
   }
 
   /// Material Picker

@@ -1,7 +1,7 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:dhobi_app/global_variables.dart';
 import 'package:dhobi_app/screens/login_page.dart';
-import 'package:dhobi_app/screens/registration_page_more_info.dart';
+import 'package:dhobi_app/screens/add_address.dart';
 import 'package:dhobi_app/widgets/largeButton.dart';
 import 'package:dhobi_app/widgets/progressDialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -71,8 +71,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
       currentFirebaseUser = user.user;
 
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => RegistrationMorePage()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AddAddress(editingAddress: false)));
     }
   }
 

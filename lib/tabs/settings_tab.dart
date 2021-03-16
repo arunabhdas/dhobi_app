@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:dhobi_app/global_variables.dart';
+import 'package:dhobi_app/helpers/helpermethods.dart';
+import 'package:dhobi_app/screens/add_address.dart';
 import 'package:dhobi_app/screens/change_password_screen.dart';
 import 'package:dhobi_app/screens/login_page.dart';
 import 'package:dhobi_app/widgets/BrandDivider.dart';
@@ -204,19 +206,32 @@ class _SettingsTabState extends State<SettingsTab> {
                 ),
               ),
               BrandDivider(),
-              ListTile(
-                subtitle: Text(
-                  '${currentUserInfo.streetAddress}, ${currentUserInfo.city}',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.purple[900],
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              AddAddress(editingAddress: false)));
+                  setState(() {});
+                },
+                child: ListTile(
+                  subtitle: Text(
+                    '${currentUserInfo.streetAddress}, ${currentUserInfo.city}',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.purple[900],
+                    ),
+                  ),
+                  title: Text(
+                    'Address',
+                    style: TextStyle(color: Colors.black54, fontSize: 13),
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios_sharp,
+                    color: Colors.black54,
                   ),
                 ),
-                title: Text(
-                  'Address',
-                  style: TextStyle(color: Colors.black54, fontSize: 13),
-                ),
-                //Add change address in trailing
               ),
               BrandDivider(),
               ListTile(
