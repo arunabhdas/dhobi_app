@@ -6,6 +6,7 @@ class OurUser {
   String phone;
   String id;
   String city;
+  String type;
   String streetAddress;
   String addressDetail;
 
@@ -13,6 +14,7 @@ class OurUser {
     this.email,
     this.fullName,
     this.phone,
+    this.type,
     this.id,
     this.city,
     this.streetAddress,
@@ -24,6 +26,7 @@ class OurUser {
     phone = snapshot.value['phone'];
     email = snapshot.value['email'];
     fullName = snapshot.value['fullname'];
+    type = snapshot.value['type'];
     city = snapshot.value['address_details']['city'];
     streetAddress = snapshot.value['address_details']['street_address'];
     addressDetail = snapshot.value['address_details']['address_detail'];

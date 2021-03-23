@@ -66,6 +66,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         'fullname': fullNameController.text,
         'email': emailController.text,
         'phone': maskFormatter.getUnmaskedText(),
+        'type': 'user'
       };
       newUserRef.set(userMap);
 

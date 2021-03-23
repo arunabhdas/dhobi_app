@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:dhobi_app/global_variables.dart';
-import 'package:dhobi_app/helpers/helpermethods.dart';
 import 'package:dhobi_app/screens/add_address.dart';
 import 'package:dhobi_app/screens/change_password_screen.dart';
 import 'package:dhobi_app/screens/login_page.dart';

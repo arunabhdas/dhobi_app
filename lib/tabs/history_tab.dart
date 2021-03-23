@@ -1,6 +1,7 @@
 import 'package:dhobi_app/datamodels/OrderDetails.dart';
 import 'package:dhobi_app/global_variables.dart';
-import 'package:dhobi_app/widgets/BrandDivider.dart';
+import 'package:dhobi_app/widgets/ListTileHistory.dart';
+import 'package:dhobi_app/screens/OrderDetailsScreen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,10 @@ class _HistoryTabState extends State<HistoryTab> {
   @override
   void initState() {
     super.initState();
+    pullFromDB();
+  }
+
+  void pullFromDB() {
     dbRef
         .orderByChild('userId')
         .equalTo(currentUserInfo.id)
@@ -40,7 +45,7 @@ class _HistoryTabState extends State<HistoryTab> {
             value['userId'],
             value['userCity'],
             value['userFullName'],
-            value['UserPhone']);
+            value['userPhone']);
         _list.add(orderDetails);
         _list.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       });
@@ -60,68 +65,29 @@ class _HistoryTabState extends State<HistoryTab> {
           style: TextStyle(fontSize: 20, color: Colors.purple[900]),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          //todo: need to refactor this code into another widget
-          child: (_list.length == 0)
-              ? Center(
-                  child: Text('Looks Like You Haven\'t Tried Our Service Yet'))
-              : ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: _list.length,
-                  itemBuilder: (_, index) {
-                    return Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            print(_list[index].key);
-                          },
-                          child: ListTile(
-                            subtitle: Text(
-                              'Pickup: ' +
-                                  '${_list[index].pickupDate}.'.split(' ')[0],
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.purple[900],
-                              ),
-                            ),
-                            title: Text(
-                              'Order Placed : ' +
-                                  '${_list[index].createdAt}.'.split(' ')[0],
-                              style: TextStyle(
-                                  color: Colors.black54, fontSize: 13),
-                            ),
-                            trailing: (_list[index].status != 'canceled')
-                                ? Text(
-                                    '${_list[index].status.toUpperCase()}'
-                                        .split(' ')[0],
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.green,
-                                      fontFamily: 'Ubunty-Bold',
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  )
-                                : Text(
-                                    '${_list[index].status.toUpperCase()}'
-                                        .split(' ')[0],
-                                    style: TextStyle(
-                                      color: Colors.deepOrange[700],
-                                      fontFamily: 'Ubunty-Bold',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                          ),
-                        ),
-                        BrandDivider(),
-                      ],
-                    );
-                  },
-                ),
-        ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        //todo: need to refactor this code into another widget
+        child: (_list.length == 0)
+            ? Center(
+                child: Text('Looks Like You Haven\'t Tried Our Service Yet'))
+            : ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: _list.length,
+                itemBuilder: (_, index) {
+                  return ListTileHistory(
+                    list: _list,
+                    index: index,
+                    onTapped: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return OrderDetailsScreen(thisOrder: _list[index]);
+                      }));
+                    },
+                  );
+                },
+              ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:dhobi_app/helpers/helpermethods.dart';
 import 'package:dhobi_app/screens/login_page.dart';
 import 'package:dhobi_app/screens/main_page.dart';
 import 'package:dhobi_app/screens/registration_page.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  HelperMethods.getCurrentUserInfo();
   runApp(MyApp());
 }
 
