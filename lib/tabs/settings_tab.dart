@@ -312,5 +312,3 @@ class _SettingsTabState extends State<SettingsTab> {
     );
   }
 }
-
-class FirebaseStorage {}

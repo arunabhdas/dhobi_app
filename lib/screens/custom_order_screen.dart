@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dhobi_app/global_variables.dart';
 import 'package:dhobi_app/widgets/BrandDivider.dart';
 import 'package:dhobi_app/widgets/largeButton.dart';
 import 'package:dhobi_app/widgets/ourDialog.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -35,31 +35,33 @@ class _CustomOrderScreenState extends State<CustomOrderScreen> {
     return buildMaterialDatePicker(context);
   }
 
-  void createLaundryRequest() {
-    DatabaseReference laundryRef =
-        FirebaseDatabase.instance.reference().child('laundryRequest').push();
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    Map requestMap = {
-      'created_at': DateTime.now().toString(),
-      'pickupDate': selectedPickupDate.toString(),
-      'deliveryDate': selectedPickupDate
-          .add((selectedPickupDate.weekday != 5)
-              ? Duration(days: 1)
-              : Duration(days: 2))
-          .toString(),
-      'userId': currentUserInfo.id,
-      'userFullName': currentUserInfo.fullName,
-      'userPhone': currentUserInfo.phone,
-      'userAddress': currentUserInfo.streetAddress,
-      'userCity': currentUserInfo.city,
-      'userAddressDetail': currentUserInfo.addressDetail,
-      'driver_instruction': driverFieldController.text,
-      'instruction': instructionFieldController.text,
-      'paymentMethod': 'CoD',
-      'status': 'waiting'
-    };
-    laundryRef.set(requestMap);
-    Navigator.pop(context, 'succesful');
+  void createLaundryRequest() {
+    CollectionReference laundryRef =
+        FirebaseFirestore.instance.collection('laundryRequest');
+    laundryRef
+        .add({
+          'created_at': DateTime.now().toString(),
+          'pickupDate': selectedPickupDate.toString(),
+          'deliveryDate': selectedPickupDate
+              .add((selectedPickupDate.weekday != 5)
+                  ? Duration(days: 1)
+                  : Duration(days: 2))
+              .toString(),
+          'userId': currentUserInfo.id,
+          'userFullName': currentUserInfo.fullName,
+          'userPhone': currentUserInfo.phone,
+          'userAddress': currentUserInfo.streetAddress,
+          'userCity': currentUserInfo.city,
+          'userAddressDetail': currentUserInfo.addressDetail,
+          'driver_instruction': driverFieldController.text,
+          'instruction': instructionFieldController.text,
+          'paymentMethod': 'CoD',
+          'status': 'waiting'
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed : $error"));
   }
 
   /// Material Picker

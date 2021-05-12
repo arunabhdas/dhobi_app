@@ -1,5 +1,5 @@
 class OrderDetails {
-  String key;
+  String id;
   String createdAt;
   String deliveryDate;
   String pickupDate;
@@ -15,7 +15,7 @@ class OrderDetails {
   String userFullName;
 
   OrderDetails(
-    this.key,
+    this.id,
     this.createdAt,
     this.deliveryDate,
     this.driverInstruction,

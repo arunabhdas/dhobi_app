@@ -1,14 +1,14 @@
-import 'package:dhobi_app/datamodels/OrderDetails.dart';
 import 'package:dhobi_app/widgets/BrandDivider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ListTileHistory extends StatelessWidget {
-  final List<OrderDetails> list;
-  final int index;
+  final String pickupDate;
+  final String status;
+  final String createdAt;
   final Function onTapped;
-
-  ListTileHistory({this.list, this.index, this.onTapped});
+  ListTileHistory(
+      {this.pickupDate, this.status, this.createdAt, this.onTapped});
 
   @override
   Widget build(BuildContext context) {
@@ -18,19 +18,19 @@ class ListTileHistory extends StatelessWidget {
           onTap: onTapped,
           child: ListTile(
             subtitle: Text(
-              '${DateFormat('EEEE, MMMM d').format(DateTime.parse(list[index].pickupDate))}',
+              '${DateFormat('EEEE, MMMM d').format(DateTime.parse(pickupDate))}',
               style: TextStyle(
                 fontSize: 20,
                 color: Colors.purple[900],
               ),
             ),
             title: Text(
-              'Order Placed : ' + '${list[index].createdAt}.'.split(' ')[0],
+              'Order Placed : ' + '$createdAt.'.split(' ')[0],
               style: TextStyle(color: Colors.black54, fontSize: 13),
             ),
-            trailing: (list[index].status != 'canceled')
+            trailing: (status != 'canceled')
                 ? Text(
-                    '${list[index].status.toUpperCase()}'.split(' ')[0],
+                    '${status.toUpperCase()}'.split(' ')[0],
                     style: TextStyle(
                       color: Colors.green,
                       fontFamily: 'Ubunty-Bold',
@@ -39,7 +39,7 @@ class ListTileHistory extends StatelessWidget {
                     ),
                   )
                 : Text(
-                    '${list[index].status.toUpperCase()}'.split(' ')[0],
+                    '${status.toUpperCase()}'.split(' ')[0],
                     style: TextStyle(
                         color: Colors.deepOrangeAccent[700],
                         fontSize: 16,

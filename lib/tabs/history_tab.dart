@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dhobi_app/datamodels/OrderDetails.dart';
 import 'package:dhobi_app/global_variables.dart';
-import 'package:dhobi_app/widgets/ListTileHistory.dart';
 import 'package:dhobi_app/screens/OrderDetailsScreen.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:dhobi_app/widgets/ListTileHistory.dart';
 import 'package:flutter/material.dart';
 
 class HistoryTab extends StatefulWidget {
@@ -11,47 +11,9 @@ class HistoryTab extends StatefulWidget {
 }
 
 class _HistoryTabState extends State<HistoryTab> {
-  DatabaseReference dbRef =
-      FirebaseDatabase.instance.reference().child('laundryRequest');
-
-  List<OrderDetails> _list = [];
-
-  @override
-  void initState() {
-    super.initState();
-    pullFromDB();
-  }
-
-  void pullFromDB() {
-    dbRef
-        .orderByChild('userId')
-        .equalTo(currentUserInfo.id)
-        .once()
-        .then((DataSnapshot snapshot) {
-      var data = snapshot.value;
-      _list.clear();
-      data.forEach((key, value) {
-        OrderDetails orderDetails = OrderDetails(
-            key,
-            value['created_at'],
-            value['deliveryDate'],
-            value['driver_instruction'],
-            value['instruction'],
-            value['paymentMethod'],
-            value['pickupDate'],
-            value['status'],
-            value['userAddress'],
-            value['userAddressDetail'],
-            value['userId'],
-            value['userCity'],
-            value['userFullName'],
-            value['userPhone']);
-        _list.add(orderDetails);
-        _list.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      });
-      setState(() {});
-    });
-  }
+  Query laundryRef = FirebaseFirestore.instance
+      .collection('laundryRequest')
+      .where('user_id', isEqualTo: currentUserInfo.id);
 
   @override
   Widget build(BuildContext context) {
@@ -68,26 +30,51 @@ class _HistoryTabState extends State<HistoryTab> {
       body: Padding(
         padding: EdgeInsets.all(16.0),
         //todo: need to refactor this code into another widget
-        child: (_list.length == 0)
-            ? Center(
-                child: Text('Looks Like You Haven\'t Tried Our Service Yet'))
-            : ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: _list.length,
-                itemBuilder: (_, index) {
-                  return ListTileHistory(
-                    list: _list,
-                    index: index,
-                    onTapped: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return OrderDetailsScreen(thisOrder: _list[index]);
-                      }));
-                    },
-                  );
-                },
-              ),
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('laundryRequest')
+              .where("userId", isEqualTo: currentUserInfo.id)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return ListView.builder(
+              itemExtent: 80.0,
+              itemCount: snapshot.data.docs.length,
+              itemBuilder: (context, index) {
+                return ListTileHistory(
+                  pickupDate: snapshot.data.docs[index]['pickupDate'],
+                  createdAt: snapshot.data.docs[index]['created_at'],
+                  status: snapshot.data.docs[index]['status'],
+                  onTapped: () {
+                    OrderDetails orderDetails = OrderDetails(
+                        snapshot.data.docs[index].id,
+                        snapshot.data.docs[index]['created_at'],
+                        snapshot.data.docs[index]['deliveryDate'],
+                        snapshot.data.docs[index]['driver_instruction'],
+                        snapshot.data.docs[index]['instruction'],
+                        snapshot.data.docs[index]['paymentMethod'],
+                        snapshot.data.docs[index]['pickupDate'],
+                        snapshot.data.docs[index]['status'],
+                        snapshot.data.docs[index]['userAddress'],
+                        snapshot.data.docs[index]['userAddressDetail'],
+                        snapshot.data.docs[index]['userId'],
+                        snapshot.data.docs[index]['userCity'],
+                        snapshot.data.docs[index]['userFullName'],
+                        snapshot.data.docs[index]['userPhone']);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return OrderDetailsScreen(thisOrder: orderDetails);
+                    }));
+                  },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
