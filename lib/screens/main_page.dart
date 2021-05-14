@@ -1,6 +1,6 @@
 import 'package:dhobi_app/helpers/helpermethods.dart';
+import 'package:dhobi_app/screens/custom_order_screen.dart';
 import 'package:dhobi_app/tabs/history_tab.dart';
-import 'package:dhobi_app/tabs/home_tab.dart';
 import 'package:dhobi_app/tabs/info_tab.dart';
 import 'package:dhobi_app/tabs/settings_tab.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,6 @@ class _MainPageState extends State<MainPage>
     super.initState();
     tabController = TabController(length: 4, vsync: this);
     HelperMethods.getCurrentUserInfo();
-    //HelperMethods.getProfilePictureLink();
   }
 
   @override
@@ -47,7 +46,7 @@ class _MainPageState extends State<MainPage>
           physics: NeverScrollableScrollPhysics(),
           controller: tabController,
           children: [
-            HomeTab(),
+            CustomOrderScreen(),
             HistoryTab(),
             InfoTab(),
             SettingsTab(),

@@ -22,6 +22,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.grey,
         primaryColor: Colors.purple[900],
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        appBarTheme: AppBarTheme(
+          iconTheme: IconThemeData(
+            color: Colors.purple[900],
+          ),
+        ),
       ),
       initialRoute: FirebaseAuth.instance.currentUser == null
           ? LoginPage.id

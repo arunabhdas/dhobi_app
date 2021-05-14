@@ -13,7 +13,7 @@ class HistoryTab extends StatefulWidget {
 class _HistoryTabState extends State<HistoryTab> {
   Query laundryRef = FirebaseFirestore.instance
       .collection('laundryRequest')
-      .where('user_id', isEqualTo: currentUserInfo.id);
+      .where("userId", isEqualTo: currentUserInfo.id);
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +28,11 @@ class _HistoryTabState extends State<HistoryTab> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
         //todo: need to refactor this code into another widget
         child: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('laundryRequest')
-              .where("userId", isEqualTo: currentUserInfo.id)
-              .snapshots(),
+          stream:
+              laundryRef.orderBy("pickupDate", descending: true).snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Center(
